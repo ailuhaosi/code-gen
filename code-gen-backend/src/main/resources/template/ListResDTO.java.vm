@@ -1,0 +1,30 @@
+package ${package}.${moduleName}.${pathName}.dto;
+
+import ${package}.common.utils.PageUtils;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+/**
+ * 对应表格列的每个组件
+ * */
+
+@ApiModel(value = "${moduleName}_${classname}-list-res")
+public class ${className}ListResDTO extends PageUtils<${className}ListResDTO.${className}ListItemDTO> {
+
+    @Data
+    @ApiModel(value = "${moduleName}_${classname}-list-res-item")
+    public static class ${moduleName}ListItemDTO {
+        #foreach ($entry in $componentConfig.entrySet())
+
+            #if($entry.getKey() == "tableConfigs")
+                #set($curComponentConfigs = $entry.getValue())
+                #foreach($curConfig in $curComponentConfigs)
+
+                @ApiModelProperty(value = $curConfig.getComments())
+                private $curConfig.getAttrType() $curConfig.getAttrname();
+                #end
+            #end
+        #end
+    }
+}

@@ -1,0 +1,46 @@
+#set($curComponentConfigs = $entry.getValue())
+#foreach($curConfig in $curComponentConfigs)
+    #if($curConfig.getComponentType() != "Hidden")
+    {
+    label: "$curConfig.getComponentLabel()：",
+    type: "$curConfig.getComponentType()",
+    key: "$curConfig.getComponentKey()",
+    componentAttr: {
+        #set($curComponentAttr = $curConfig.getComponentAttr())
+        #set($allAttrs = $curComponentAttr.getAllAttrs())
+        #foreach ($attrKey in $allAttrs.keySet())
+            #if("$!allAttrs.get($attrKey)" != "" && $attrKey.charAt(0) != '_')
+                #if($curComponentAttr.getVariableType($attrKey) == "String")
+                    $attrKey: "$allAttrs.get($attrKey)",
+                #else
+                    $attrKey: $allAttrs.get($attrKey),
+                #end
+
+            #end
+        #end
+    },
+        #foreach ($attrKey in $allAttrs.keySet())
+            #if("$!allAttrs.get($attrKey)" != "" && $attrKey.charAt(0) == '_')
+                #set($newAttrKey = $curComponentAttr.getVariableType($attrKey))
+                #set($curAttrKeyVal=$allAttrs.get($attrKey))
+                #if($newAttrKey == "options")
+                options: [
+                    #foreach ($curOption in $curAttrKeyVal)
+                    {label:"$curOption.getLabel()",value:$curOption.getValue()},
+                    #end
+                ],
+                #end
+                #if($newAttrKey == "matchMapObj")
+                matchMapObj: {
+                value:
+                    #foreach ($curMappingKey in $curAttrKeyVal.getValue().keySet())
+                    {$curMappingKey:"$curAttrKeyVal.getValue().get($curMappingKey)"},
+                    #end
+                default:""
+                },
+                #end
+            #end
+        #end
+    },
+    #end
+#end

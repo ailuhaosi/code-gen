@@ -1,0 +1,23 @@
+package ${package}.${moduleName}.${pathName}.dto.converter;
+
+package ${package}.${moduleName}.${pathName}.dto.${className}SaveReqDTO;
+package ${package}.${moduleName}.${pathName}.entity.${className}Entity;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
+import org.mapstruct.factory.Mappers;
+
+@Mapper(componentModel = "spring")
+public interface ${className}SaveReqConverter {
+    ${className}SaveReqConverter INSTANCE = Mappers.getMapper( ${className}SaveReqConverter.class );
+
+    @Mappings({
+            @Mapping(target = $pk.columnName, source = $pk.columnName)
+    })
+    ${className}SaveReqDTO getDto(${className}Entity ${classname});
+
+    @Mappings({
+            @Mapping(target = "$pk.columnName", source = "$pk.columnName")
+    })
+    ${className}Entity getEntity(${className}SaveReqDTO ${classname});
+}

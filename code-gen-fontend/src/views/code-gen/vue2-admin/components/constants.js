@@ -1,0 +1,53 @@
+export const componentOptions = [{
+  label: 'Hidden',
+  value: 'Hidden',
+  applyTo: 'All'
+}, {
+  label: 'Input',
+  value: 'Input',
+  applyTo: 'All'
+}, {
+  label: 'Select',
+  value: 'Select',
+  applyTo: 'All'
+}, {
+  label: 'Switch',
+  value: 'Switch',
+  applyTo: 'All'
+}, {
+  label: 'CheckboxGroup',
+  value: 'CheckboxGroup',
+  applyTo: 'Form'
+}, {
+  label: 'RadioGroup',
+  value: 'RadioGroup',
+  applyTo: 'Form'
+}, {
+  label: 'DatePicker',
+  value: 'DatePicker',
+  applyTo: 'Form'
+}, {
+  label: 'TimePicker',
+  value: 'TimePicker',
+  applyTo: 'Form'
+}, {
+  label: 'Customize',
+  value: 'CustomizeFormItem',
+  applyTo: 'Form'
+}, {
+  label: 'MatchMapVal',
+  value: 'MatchMapVal',
+  applyTo: 'Table'
+}, {
+  label: 'SingleSelection',
+  value: 'SingleSelection',
+  applyTo: 'Table'
+}, {
+  label: 'Avatar',
+  value: 'Avatar',
+  applyTo: 'Table'
+}, {
+  label: 'Customize',
+  value: 'CustomizeTableCeil',
+  applyTo: 'Table'
+}]

@@ -1,0 +1,34 @@
+package ${package}.${moduleName}.${pathName}.dto;
+
+import ${package}.common.validator.group.UpdateGroup;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+/**
+ * 保存和更新 提交表单
+ * 对应新增按钮弹窗的表单组件
+ * */
+
+@Data
+@ApiModel(value = "${moduleName}_${classname}-save-req")
+public class ${className}SaveReqDTO {
+
+    #foreach ($entry in $componentConfig.entrySet())
+
+        #if($entry.getKey() == "dialogFormConfigs")
+            #set($curComponentConfigs = $entry.getValue())
+            #foreach($curConfig in $curComponentConfigs)
+                #if($curConfig.getIsPrimary())
+    @NotNull(message = "$curConfig.getComments() 不能为空",groups = UpdateGroup.class)
+                #end
+    @ApiModelProperty(value = $curConfig.getComments())
+    private $curConfig.getAttrType() $curConfig.getAttrname();
+            #end
+        #end
+    #end
+}
