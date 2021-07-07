@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Mark sunlightcs@gmail.com
  */
 @Controller
-@RequestMapping("/sys/generator")
+@RequestMapping("/api/sys/generator")
 public class SysGeneratorController {
     @Autowired
     private SysGeneratorService sysGeneratorService;

@@ -30,8 +30,8 @@ let ConfigsObj = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
-  transpileDependencies: ['vue-baidu-map','vue-region'],
-  publicPath: '/',
+  transpileDependencies: ['vue-baidu-map','vue-region','filter-form-table-modal'],
+  publicPath: '/web',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: false, //process.env.NODE_ENV === 'development',
@@ -57,7 +57,8 @@ let ConfigsObj = {
     name: name,
     resolve: {
       alias: {
-        '@': resolve('src')
+        '@': resolve('src'),
+        'vue$': 'vue/dist/vue.esm.js' 
       }
     }
   },

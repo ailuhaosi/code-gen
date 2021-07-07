@@ -1,7 +1,7 @@
 server:
   port: 80
   servlet:
-    context-path: /api
+    context-path: /
 
 # mysql
 spring:
@@ -34,7 +34,14 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   resources:
-    static-locations: classpath:/static/,classpath:/views/
+    static-locations: classpath:/static/
+  #spring:
+  #  thymeleaf:
+  #    cache: false
+  #    prefix: classpath:/templates/
+  #    encoding: UTF-8 #编码
+  #    suffix: .html #模板后缀
+  #    mode: HTML #模板
 
 #mongodb:
 #  host: localhost

@@ -1,64 +1,20 @@
 <template>
   <div>
-    <customize-form
-      ref="FormAboveTableRef"
-      class="form-above-table"
-      :class="mixins_formAboveTableLayout"
-      :is-dialog-container="false"
-      :form-common-attr="formCommonAttrAboveTable"
-      :footer-block-components="footerBlockComponentsAboveTable"
-      :form-item-meta-list="formItemMetaListAboveTable"
-      :form-data="formDataAboveTable"
-      @update:form-data="val => $set($data, 'formDataAboveTable', val)"
-      @do-operation="mixins_doFormAboveTableEventStrategy(arguments)"
-    />
-    <customize-table
-      ref="TableRef"
-      :table-list-loading="false"
-      :table-col-meta-data="tableColMetaData"
-      :table-body-data="tableBodyData"
-      :table-common-attr="tableCommonAttr"
-      :page-obj="pageObj"
-      @update:table-body-data="val => $set($data, 'tableBodyData', val)"
-      @update:page-obj="val => $set($data, 'pageObj', val)"
-      @do-operation="mixins_doTableEventStrategy(arguments)"
-    />
-    <customize-form
-      ref="DialogFormRef"
-      class="form-modal"
-      :is-dialog-container="true"
-      :dialog-type="dialogType"
-      :dialog-form-visible="dialogFormVisible"
-      :dialog-center="true"
-      :form-common-attr="formCommonAttrModal"
-      :footer-block-components="footerBlockComponentsModal"
-      :form-item-meta-list="dialogFormItemMetaList"
-      :form-data="dialogFormData"
-      @update:dialog-form-visible="val => (dialogFormVisible = val)"
-      @update:form-data="val => $set($data, 'dialogFormData', val)"
-      @do-operation="mixins_doDialogFormEventStrategy(arguments)"
-    >
-      <template v-slot:dialogTitle>
-        <div style="font-weight: 550">{{ dialogFormTitle }}</div>
-      </template>
-    </customize-form>
+    <FilterFormTableModalComponent class="filter-form-table-modal-component" />
   </div>
 </template>
 
 <script>
-import CustomizeForm from "@/components/CustomizeForm";
-import CustomizeTable from "@/components/CustomizeTable";
-import { FilterFormTableModal } from "@/mixins/FilterFormTableModal.js";
+import {FilterFormTableModal,mapKeysToTarget,cloneDeep} from "filter-form-table-modal/packages"
+// 按钮权限控制
+import { checkBtnPermission } from "@/utils/permission";
+
+const myFilterFormTableModal = FilterFormTableModal({checkBtnPermission});
+
 import {
   getDatabaseTableColumnInfoList,
   downloadSourceCode
 } from "@/api/code-gen/database-table-selector.js";
-
-import { cloneDeep } from "@/utils";
-// 按钮权限控制
-import { checkBtnPermission } from "@/utils/permission";
-
-import { mapKeysToTarget } from "@/utils";
 
 export default {
   name: "DatabaseTableInfo",
@@ -68,11 +24,8 @@ export default {
       //default: () => ({ "table-name": "tb_region" }),
     }
   },
-  components: {
-    CustomizeForm,
-    CustomizeTable
-  },
-  mixins: [FilterFormTableModal],
+  components: {},
+  mixins: [myFilterFormTableModal],
   data() {
     return {
       /**
@@ -609,33 +562,52 @@ export default {
 </script>
 
 <style scoped>
-.form-above-table {
+.filter-form-table-modal-component /deep/ .form-above-table {
   margin-top: 50px;
 }
 
 /* 表单的不同item项，需要在同一行 */
-.form-above-table /deep/ .el-form-item {
+.filter-form-table-modal-component
+  /deep/
+  .form-above-table
+  /deep/
+  .el-form-item {
   width: 400px;
   display: inline-block;
 }
 
-.form-above-table /deep/ .el-form-item .el-form-item__content {
+.filter-form-table-modal-component
+  /deep/
+  .form-above-table
+  /deep/
+  .el-form-item
+  .el-form-item__content {
   width: 350px;
 }
 
-.form-above-table /deep/ .el-form-item .el-form-item__content > div {
+.filter-form-table-modal-component
+  /deep/
+  .form-above-table
+  /deep/
+  .el-form-item
+  .el-form-item__content
+  > div {
   width: calc(140% - 250px);
 }
 
 /* 左右布局比例 */
 /* 仅当formAboveTable右边有三个按钮时的布局;右边得加宽不然放不下三个按钮 */
-.form-above-table.form-above-table-layout
+.filter-form-table-modal-component
+  /deep/
+  .form-above-table.form-above-table-layout
   /deep/
   .common-form-container
   .form-content-box {
   width: calc(100% - 300px);
 }
-.form-above-table.form-above-table-layout
+.filter-form-table-modal-component
+  /deep/
+  .form-above-table.form-above-table-layout
   /deep/
   .common-form-container
   .default-btns-box {

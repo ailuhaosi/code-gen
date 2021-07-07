@@ -1,5 +1,5 @@
 module.exports = {
-  title: '智慧小区门禁',
+  title: '代码生成器',
 
   /**
    * @type {boolean} true | false
