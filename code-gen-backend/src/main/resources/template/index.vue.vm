@@ -289,11 +289,7 @@
     }
 
     /* 表单的不同item项，需要在同一行 */
-    .filter-form-table-modal-component
-    /deep/
-    .form-above-table
-    /deep/
-    .el-form-item {
+    .filter-form-table-modal-component /deep/ .form-content .el-form-item {
         width: 400px;
         display: inline-block;
     }
@@ -301,7 +297,6 @@
     .filter-form-table-modal-component
     /deep/
     .form-above-table
-    /deep/
     .el-form-item
     .el-form-item__content {
         width: 350px;
@@ -310,7 +305,6 @@
     .filter-form-table-modal-component
     /deep/
     .form-above-table
-    /deep/
     .el-form-item
     .el-form-item__content
     > div {
@@ -322,7 +316,6 @@
     .filter-form-table-modal-component
     /deep/
     .form-above-table.form-above-table-layout
-    /deep/
     .common-form-container
     .form-content-box {
         width: calc(100% - 300px);
@@ -330,7 +323,6 @@
     .filter-form-table-modal-component
     /deep/
     .form-above-table.form-above-table-layout
-    /deep/
     .common-form-container
     .default-btns-box {
         width: 300px;
