@@ -135,9 +135,11 @@ public class GenUtils {
                 //List<ComponentConfigDTO> entryValue = (List<ComponentConfigDTO>) entryValue2;
                 List<ComponentConfigDTO> entryValue = entry.getValue();
                 entryValue.forEach(curConfig -> {
-                    if (el.getColumnName() == curConfig.getColumnName()) {
+
+                    if (Objects.equals(el.getColumnName(),curConfig.getColumnName())) {
                         curConfig.setAttrType(el.getAttrType());
                         curConfig.setComments(el.getComments());
+                        curConfig.setAttrname(StringUtils.uncapitalize(curConfig.getAttrName()));
                     }
                 });
             });
@@ -383,11 +385,11 @@ public class GenUtils {
         }
 
         if (template.contains("SaveReqDTO.java.vm")) {
-            return packagePath + "dto" + File.separator + className + "saveReqDTO.java";
+            return packagePath + "dto" + File.separator + className + "SaveReqDTO.java";
         }
 
         if (template.contains("SaveReqConverter.java.vm")) {
-            return packagePath + "dto" + File.separator + className + "converter" + File.separator + className + "saveReqDTO.java";
+            return packagePath + "dto" + File.separator + "converter" + File.separator + className + "SaveReqConverter.java";
         }
 
         return null;

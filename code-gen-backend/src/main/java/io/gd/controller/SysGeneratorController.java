@@ -61,6 +61,7 @@ public class SysGeneratorController {
      */
     @PostMapping("/download-sourcecode")
     public void downLoadCode(@RequestBody DownloadSourceCodeParamDTO info, HttpServletResponse response) throws IOException {
+        System.out.println(info+"-----------------");
         byte[] data = sysGeneratorService.generatorSourceCode(info.getGenPageInfo(), info.getTableName());
 
         response.reset();

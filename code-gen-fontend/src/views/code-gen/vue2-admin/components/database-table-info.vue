@@ -5,11 +5,15 @@
 </template>
 
 <script>
-import {FilterFormTableModal,mapKeysToTarget,cloneDeep} from "filter-form-table-modal/packages"
+import {
+  FilterFormTableModal,
+  mapKeysToTarget,
+  cloneDeep
+} from "filter-form-table-modal/packages";
 // 按钮权限控制
 import { checkBtnPermission } from "@/utils/permission";
 
-const myFilterFormTableModal = FilterFormTableModal({checkBtnPermission});
+const myFilterFormTableModal = FilterFormTableModal({ checkBtnPermission });
 
 import {
   getDatabaseTableColumnInfoList,
@@ -186,7 +190,10 @@ export default {
           attrname: curRow["column-name"]
             .split("_")
             .map((el, idx) => {
-              const ret = idx === 0 ? el[0].toLowerCase() + el.substring(1) : el[0].toUpperCase() + el.substring(1);
+              const ret =
+                idx === 0
+                  ? el[0].toLowerCase() + el.substring(1)
+                  : el[0].toUpperCase() + el.substring(1);
               return ret;
             })
             .join(""),
@@ -195,7 +202,7 @@ export default {
           "is-primary": curRow["column-key"].indexOf("PRI") > -1,
           "component-key": curRow["column-name"].replace("_", "-"),
           "component-label": curRow["column-comment"],
-          "component-attr":{},
+          "component-attr": {},
           "component-type":
             curRow["column-key"].indexOf("PRI") > -1
               ? "Hidden"
@@ -437,6 +444,7 @@ export default {
               }
             }
           };
+          console.log(mapKeysToTarget(bodyData, "BackEnd"), "=================");
           const res = await downloadSourceCode(
             mapKeysToTarget(bodyData, "BackEnd")
           );
