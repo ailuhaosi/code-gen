@@ -9,39 +9,39 @@ import {
   FilterFormTableModal,
   mapKeysToTarget,
   cloneDeep
-} from "filter-form-table-modal/packages";
+} from 'filter-form-table-modal/packages'
 // 按钮权限控制
-import { checkBtnPermission } from "@/utils/permission";
+import { checkBtnPermission } from '@/utils/permission'
 
-const myFilterFormTableModal = FilterFormTableModal({ checkBtnPermission });
+const myFilterFormTableModal = FilterFormTableModal({ checkBtnPermission })
 
 import {
   getDatabaseTableColumnInfoList,
   downloadSourceCode
-} from "@/api/code-gen/database-table-selector.js";
+} from '@/api/code-gen/database-table-selector.js'
 
 export default {
-  name: "DatabaseTableInfo",
+  name: 'DatabaseTableInfo',
+  components: {},
+  mixins: [myFilterFormTableModal],
   props: {
     initFormDataAboveTable: {
       type: Object
-      //default: () => ({ "table-name": "tb_region" }),
+      // default: () => ({ "table-name": "tb_region" }),
     }
   },
-  components: {},
-  mixins: [myFilterFormTableModal],
   data() {
     return {
       /**
        * 表格上方的表单 相关数据开始
        * */
-      //formAboveTableCanToggledShowStatusOverIdx: 4, //formItemMetaListAboveTable中索引>=4的统统隐藏
+      // formAboveTableCanToggledShowStatusOverIdx: 4, //formItemMetaListAboveTable中索引>=4的统统隐藏
       formItemMetaListAboveTable: [
         {
-          label: "表名：",
-          type: "Input",
-          key: "table-name",
-          componentAttr: { placeholder: "请输入表名" }
+          label: '表名：',
+          type: 'Input',
+          key: 'table-name',
+          componentAttr: { placeholder: '请输入表名' }
         }
       ],
       /**
@@ -51,25 +51,25 @@ export default {
       /**
        * 表格 相关数据开始
        * */
-      tableCommonAttr: { "row-key": "column-name" },
+      tableCommonAttr: { 'row-key': 'column-name' },
       tableColMetaData: [
         {
-          colType: "selection",
-          key: "multi-selection",
-          width: "55",
+          colType: 'selection',
+          key: 'multi-selection',
+          width: '55',
           isShow: true
         },
-        { type: "SerialNum", key: "serial-num", label: "序号", width: "100" },
-        { type: "Text", key: "column-name", label: "列名" },
-        { type: "Text", key: "data-type", label: "类型" },
-        { type: "Text", key: "column-key", label: "列key" },
-        { type: "Text", key: "extra", label: "extra" },
-        { type: "Text", key: "column-comment", label: "列注释" },
+        { type: 'SerialNum', key: 'serial-num', label: '序号', width: '100' },
+        { type: 'Text', key: 'column-name', label: '列名' },
+        { type: 'Text', key: 'data-type', label: '类型' },
+        { type: 'Text', key: 'column-key', label: '列key' },
+        { type: 'Text', key: 'extra', label: 'extra' },
+        { type: 'Text', key: 'column-comment', label: '列注释' },
         {
-          type: "MultiComponents",
-          key: "table-operations-block",
-          label: "操作",
-          width: "350",
+          type: 'MultiComponents',
+          key: 'table-operations-block',
+          label: '操作',
+          width: '350',
           componentList: [],
           isShow: true
         }
@@ -87,13 +87,13 @@ export default {
       formAboveTableConfigs: [],
       tableConfigs: [],
       dialogFormConfigs: []
-    };
+    }
   },
   watch: {
     initFormDataAboveTable: {
       handler(newVal, oldVal) {
-        this.formDataAboveTable = newVal;
-        this.mixins_getBussinessKeyList();
+        this.formDataAboveTable = newVal
+        this.mixins_getBussinessKeyList()
       },
       immediate: true,
       deep: true
@@ -101,20 +101,20 @@ export default {
   },
   methods: {
     download(url, data) {
-      let body = document.getElementsByTagName("body")[0];
-      let form = document.createElement("form");
-      form.method = "POST";
-      form.action = url;
+      const body = document.getElementsByTagName('body')[0]
+      const form = document.createElement('form')
+      form.method = 'POST'
+      form.action = url
       for (key in data) {
-        let param = document.createElement("input");
-        param.type = "hidden";
-        param.name = key;
-        param.value = data[key];
-        form.appendChild(param);
+        const param = document.createElement('input')
+        param.type = 'hidden'
+        param.name = key
+        param.value = data[key]
+        form.appendChild(param)
       }
-      body.appendChild(form);
-      form.submit();
-      body.removeChild(form);
+      body.appendChild(form)
+      form.submit()
+      body.removeChild(form)
     },
     /* 校验三个源码是否配置完整 */
     validSourceCodeConfig() {
@@ -124,95 +124,95 @@ export default {
           this[targetConfigsAlias].length > 0 &&
           this[targetConfigsAlias].every(
             config =>
-              (config["component-type"] !== "Hidden" &&
-                config["component-label"] !== "") ||
-              config["component-type"] === "Hidden"
-          );
+              (config['component-type'] !== 'Hidden' &&
+                config['component-label'] !== '') ||
+              config['component-type'] === 'Hidden'
+          )
         if (!validLabelExists) {
-          this.$message.warning(`${targetConfigsAlias}的label不能为空`);
+          this.$message.warning(`${targetConfigsAlias}的label不能为空`)
         }
         // 校验表格配置是否选中主键
         const hasTablePrimaryKey =
-          targetConfigsAlias !== "tableConfigs" ||
-          (targetConfigsAlias === "tableConfigs" &&
-            this[targetConfigsAlias].some(el => el["is-primary"]));
+          targetConfigsAlias !== 'tableConfigs' ||
+          (targetConfigsAlias === 'tableConfigs' &&
+            this[targetConfigsAlias].some(el => el['is-primary']))
 
         if (!hasTablePrimaryKey) {
-          this.$message.warning(`表格必须配置主键`);
+          this.$message.warning(`表格必须配置主键`)
         }
-        return validLabelExists && hasTablePrimaryKey;
-      };
+        return validLabelExists && hasTablePrimaryKey
+      }
       return [
-        "formAboveTableConfigs",
-        "tableConfigs",
-        "dialogFormConfigs"
-      ].every(validTargetConfigs);
+        'formAboveTableConfigs',
+        'tableConfigs',
+        'dialogFormConfigs'
+      ].every(validTargetConfigs)
     },
     pickedRowSetTargetCurRowAttr(
       row,
       rowIdx,
-      curConfigsAlias = "formAboveTableConfigs"
+      curConfigsAlias = 'formAboveTableConfigs'
     ) {
       const btnTextPrefix =
-        curConfigsAlias === "formAboveTableConfigs"
-          ? "搜索表单"
-          : curConfigsAlias === "tableConfigs"
-          ? "表格"
-          : "弹窗表单";
-      let attrObj = {};
+        curConfigsAlias === 'formAboveTableConfigs'
+          ? '搜索表单'
+          : curConfigsAlias === 'tableConfigs'
+            ? '表格'
+            : '弹窗表单'
+      const attrObj = {}
       const hasPicked = this[curConfigsAlias].some(
-        el => el["column-name"] === row["column-name"]
-      );
+        el => el['column-name'] === row['column-name']
+      )
       if (hasPicked) {
-        attrObj.textVal = `${btnTextPrefix}-已选`;
-        attrObj.type = "warning";
+        attrObj.textVal = `${btnTextPrefix}-已选`
+        attrObj.type = 'warning'
       } else {
-        attrObj.textVal = `${btnTextPrefix}-未选`;
-        attrObj.type = "primary";
+        attrObj.textVal = `${btnTextPrefix}-未选`
+        attrObj.type = 'primary'
       }
-      return attrObj;
+      return attrObj
     },
     pickedRowSetTargetConfigs(curConfigsAlias, rowIdx) {
-      const curRow = this.tableBodyData[rowIdx];
+      const curRow = this.tableBodyData[rowIdx]
       const idxInConfigs = this[curConfigsAlias].findIndex(
-        el => el["column-name"] === curRow["column-name"]
-      );
-      //console.log(curRow, idxInConfigs, "==============");
+        el => el['column-name'] === curRow['column-name']
+      )
+      // console.log(curRow, idxInConfigs, "==============");
 
       if (idxInConfigs > -1) {
-        this[curConfigsAlias].splice(idxInConfigs, 1);
+        this[curConfigsAlias].splice(idxInConfigs, 1)
       } else {
         const willPushConfig = {
-          "attr-name": curRow["column-name"]
-            .split("_")
+          'attr-name': curRow['column-name']
+            .split('_')
             .map(el => el[0].toUpperCase() + el.substring(1))
-            .join(""),
-          attrname: curRow["column-name"]
-            .split("_")
+            .join(''),
+          attrname: curRow['column-name']
+            .split('_')
             .map((el, idx) => {
               const ret =
                 idx === 0
                   ? el[0].toLowerCase() + el.substring(1)
-                  : el[0].toUpperCase() + el.substring(1);
-              return ret;
+                  : el[0].toUpperCase() + el.substring(1)
+              return ret
             })
-            .join(""),
-          "column-name": curRow["column-name"],
-          "data-type": curRow["data-type"],
-          "is-primary": curRow["column-key"].indexOf("PRI") > -1,
-          "component-key": curRow["column-name"].replace("_", "-"),
-          "component-label": curRow["column-comment"],
-          "component-attr": {},
-          "component-type":
-            curRow["column-key"].indexOf("PRI") > -1
-              ? "Hidden"
-              : curConfigsAlias === "tableConfigs"
-              ? "Text"
-              : "Input"
-        };
-        this[curConfigsAlias].push(willPushConfig);
+            .join(''),
+          'column-name': curRow['column-name'],
+          'data-type': curRow['data-type'],
+          'is-primary': curRow['column-key'].indexOf('PRI') > -1,
+          'component-key': curRow['column-name'].replace('_', '-'),
+          'component-label': curRow['column-comment'],
+          'component-attr': {},
+          'component-type':
+            curRow['column-key'].indexOf('PRI') > -1
+              ? 'Hidden'
+              : curConfigsAlias === 'tableConfigs'
+                ? 'Text'
+                : 'Input'
+        }
+        this[curConfigsAlias].push(willPushConfig)
       }
-      this.$emit("setConfigsToTarget", curConfigsAlias, this[curConfigsAlias]);
+      this.$emit('setConfigsToTarget', curConfigsAlias, this[curConfigsAlias])
     },
     /**
      * 获取增删改查的函数名
@@ -221,13 +221,13 @@ export default {
      *  */
     getBussinessCurdMethodName(curdType) {
       const allCurdMethodNames = {
-        //Save: saveRegion,
-        //Delete: deleteRegionByIds,
-        //Update: updateRegion,
+        // Save: saveRegion,
+        // Delete: deleteRegionByIds,
+        // Update: updateRegion,
         GetList: getDatabaseTableColumnInfoList
-        //GetInfo: getRegionInfo
-      };
-      return allCurdMethodNames[curdType];
+        // GetInfo: getRegionInfo
+      }
+      return allCurdMethodNames[curdType]
     },
     /**
      * 获取当前页面按钮的权限
@@ -236,14 +236,14 @@ export default {
      *  */
     getBussinessBtnPerms(btnType) {
       const allBtnPerms = {
-        Search: "biz:table:list",
-        Save: "biz:region:save",
-        Update: "biz:region:update",
-        Delete: "biz:region:delete"
-      };
-      return allBtnPerms[btnType];
+        Search: 'biz:table:list',
+        Save: 'biz:region:save',
+        Update: 'biz:region:update',
+        Delete: 'biz:region:delete'
+      }
+      return allBtnPerms[btnType]
     },
-    ////////////////////////////////////
+    // //////////////////////////////////
     /**
      * 核心函数介绍:
      *
@@ -252,7 +252,7 @@ export default {
      * 2. 事件处理端：get···EventStrategy 函数内定义了 触发源传过来的事件的具体处理逻辑
      *    EventStrategy 函数会根据触发源中不同事件策略命名 分发到不同的 事件策略函数中
      */
-    ////////////////////////////////////
+    // //////////////////////////////////
     /**
      * 表格上方的表单 的 按钮等组件;默认已存在展开、重置、查询、添加、批量删除等按钮
      * 如果直接使用内置组件不改动，则直接返回null 或 undefined即可
@@ -260,47 +260,47 @@ export default {
      * componentMetaDataArr: 按次序排按钮的key;若不需要自带的重置按钮,可以用占位符替代
      * data表示待插入的按钮组件的元数据;其中每个data对应为数组的占位符
      *  */
-    getAppendFooterBlockComponentsAboveTable(emitTarget = "FormAboveTable") {
-      //return null;
+    getAppendFooterBlockComponentsAboveTable(emitTarget = 'FormAboveTable') {
+      // return null;
       return {
         componentKeysArr: [
-          "form-more-above-table",
-          "form-reset-above-table",
-          "form-search-above-table",
-          //"form-add-above-table",
-          //"form-batch-delete-above-table",
-          "$"
+          'form-more-above-table',
+          'form-reset-above-table',
+          'form-search-above-table',
+          // "form-add-above-table",
+          // "form-batch-delete-above-table",
+          '$'
         ],
         componentMetaDataArr: [
           {
-            key: "form-download-sourcecode-above-table",
-            type: "Button",
-            operationBtnType: "multi-select-operation-btn",
+            key: 'form-download-sourcecode-above-table',
+            type: 'Button',
+            operationBtnType: 'multi-select-operation-btn',
             componentAttr: {
-              type: "warning",
-              textVal: "下载源码",
+              type: 'warning',
+              textVal: '下载源码',
               icon: {
-                class: "el-icon-delete",
-                place: "left"
+                class: 'el-icon-delete',
+                place: 'left'
               }
             },
             events: eventFromKey => {
               return {
-                click: async () => {
-                  const isValidPass = this.validSourceCodeConfig();
+                click: async() => {
+                  const isValidPass = this.validSourceCodeConfig()
                   if (isValidPass) {
                     this.mixins_emitEventStrategy(
                       emitTarget,
-                      "DownloadSourceCodeDialogTipOpen",
+                      'DownloadSourceCodeDialogTipOpen',
                       eventFromKey
-                    );
+                    )
                   }
                 }
-              };
+              }
             }
           }
         ]
-      };
+      }
     },
     /**
      * 表格内部 的 行操作按钮等组件;默认已存在编辑、删除等按钮
@@ -309,107 +309,107 @@ export default {
      * componentMetaDataArr: 按次序排按钮的key;若不需要自带的重置按钮,可以用占位符替代
      * data表示待插入的按钮组件的元数据;其中每个data对应为数组的占位符
      *  */
-    getAppendTableOperationsBlockComponents(emitTarget = "Table") {
-      //return null;
+    getAppendTableOperationsBlockComponents(emitTarget = 'Table') {
+      // return null;
       return {
         componentKeysArr: [
-          //"table-edit-btn",
-          //"table-delete-btn",
-          "$",
-          "$",
-          "$"
+          // "table-edit-btn",
+          // "table-delete-btn",
+          '$',
+          '$',
+          '$'
         ],
         componentMetaDataArr: [
           {
-            type: "Button", // 可不填,默认是按钮
-            key: "table-row-form-above-table-config-btn",
+            type: 'Button', // 可不填,默认是按钮
+            key: 'table-row-form-above-table-config-btn',
             componentAttr: {
-              type: "primary",
-              textVal: "搜索表单-未选",
-              size: "small"
+              type: 'primary',
+              textVal: '搜索表单-未选',
+              size: 'small'
             },
             curRowAttr: (row, rowIdx) => {
               return this.pickedRowSetTargetCurRowAttr(
                 row,
                 rowIdx,
-                "formAboveTableConfigs"
-              );
+                'formAboveTableConfigs'
+              )
             },
             events: (rowIdx, colIdx, colKey, ...data) => {
               return {
                 click: () => {
                   this.pickedRowSetTargetConfigs(
-                    "formAboveTableConfigs",
+                    'formAboveTableConfigs',
                     rowIdx
-                  );
+                  )
                 }
-              };
+              }
             },
             isShow: checkBtnPermission(
               this,
-              this.getBussinessBtnPerms("Delete")
+              this.getBussinessBtnPerms('Delete')
             )
           },
           {
-            type: "Button", // 可不填,默认是按钮
-            key: "table-row-table-config-btn",
+            type: 'Button', // 可不填,默认是按钮
+            key: 'table-row-table-config-btn',
             componentAttr: {
-              type: "primary",
-              textVal: "表格-未选",
-              size: "small"
+              type: 'primary',
+              textVal: '表格-未选',
+              size: 'small'
             },
             curRowAttr: (row, rowIdx) => {
               return this.pickedRowSetTargetCurRowAttr(
                 row,
                 rowIdx,
-                "tableConfigs"
-              );
+                'tableConfigs'
+              )
             },
             events: (rowIdx, colIdx, colKey, ...data) => {
               return {
                 click: () => {
-                  this.pickedRowSetTargetConfigs("tableConfigs", rowIdx);
+                  this.pickedRowSetTargetConfigs('tableConfigs', rowIdx)
                 }
-              };
+              }
             },
             isShow: checkBtnPermission(
               this,
-              this.getBussinessBtnPerms("Delete")
+              this.getBussinessBtnPerms('Delete')
             )
           },
           {
-            type: "Button", // 可不填,默认是按钮
-            key: "table-row-dialog-form-config-btn",
+            type: 'Button', // 可不填,默认是按钮
+            key: 'table-row-dialog-form-config-btn',
             componentAttr: {
-              type: "primary",
-              textVal: "弹窗表单-未选",
-              size: "small"
+              type: 'primary',
+              textVal: '弹窗表单-未选',
+              size: 'small'
             },
             curRowAttr: (row, rowIdx) => {
               return this.pickedRowSetTargetCurRowAttr(
                 row,
                 rowIdx,
-                "dialogFormConfigs"
-              );
+                'dialogFormConfigs'
+              )
             },
             events: (rowIdx, colIdx, colKey, ...data) => {
               return {
                 click: () => {
-                  this.pickedRowSetTargetConfigs("dialogFormConfigs", rowIdx);
+                  this.pickedRowSetTargetConfigs('dialogFormConfigs', rowIdx)
                 }
-              };
+              }
             },
             isShow: checkBtnPermission(
               this,
-              this.getBussinessBtnPerms("Delete")
+              this.getBussinessBtnPerms('Delete')
             )
           }
         ]
-      };
+      }
     },
-    ////////////////////////////////////
+    // //////////////////////////////////
     // 写请求接口,最常用的三个函数 getDialogTipOpenEventStrategy、getDialogFormOpenEventStrategy、getDialogFormValidSubmitEventStrategy
-    ////////////////////////////////////
+    // //////////////////////////////////
     /**
      * @param {string} strategyName 策略名
      * @param {int | null} pickedRowIdx 表格的行idx;如果不是表格打开的则为null
@@ -426,49 +426,49 @@ export default {
      */
     getDialogTipOpenEventStrategy(strategyName, pickedRowIdx, args) {
       const strategys = {
-        DownloadSourceCodeDialogTipOpen: async () => {
+        DownloadSourceCodeDialogTipOpen: async() => {
           const bodyData = {
-            "table-name": this.formDataAboveTable["table-name"],
-            "gen-page-info": {
-              type: "vue2-admin",
+            'table-name': this.formDataAboveTable['table-name'],
+            'gen-page-info': {
+              type: 'vue2-admin',
               componentConfig: {
                 formAboveTableConfigs: mapKeysToTarget(
                   this.formAboveTableConfigs,
-                  "BackEnd"
+                  'BackEnd'
                 ),
-                tableConfigs: mapKeysToTarget(this.tableConfigs, "BackEnd"),
+                tableConfigs: mapKeysToTarget(this.tableConfigs, 'BackEnd'),
                 dialogFormConfigs: mapKeysToTarget(
                   this.dialogFormConfigs,
-                  "BackEnd"
+                  'BackEnd'
                 )
               }
             }
-          };
-          console.log(mapKeysToTarget(bodyData, "BackEnd"), "=================");
+          }
+          console.log(mapKeysToTarget(bodyData, 'BackEnd'), '=================')
           const res = await downloadSourceCode(
-            mapKeysToTarget(bodyData, "BackEnd")
-          );
-          let blob = res;
+            mapKeysToTarget(bodyData, 'BackEnd')
+          )
+          const blob = res
           // 创建一个URL指向Blob，也就是Blob URL
-          let url = window.URL.createObjectURL(blob);
+          const url = window.URL.createObjectURL(blob)
           // 创建<a>标签
-          let el = document.createElement("a");
-          el.href = url;
+          const el = document.createElement('a')
+          el.href = url
           // 指定下载的文件名
-          el.download = "source-code.zip";
-          el.hidden = true;
-          document.body.appendChild(el);
-          el.click();
-          document.body.removeChild(el);
+          el.download = 'source-code.zip'
+          el.hidden = true
+          document.body.appendChild(el)
+          el.click()
+          document.body.removeChild(el)
 
           /* this.download(
             "http://localhost/api/sys/generator/download-sourcecode",
             mapKeysToTarget(bodyData, "BackEnd")
           ); */
-          console.log(res, strategyName, pickedRowIdx, args, "xxxxxxxxxxxxx");
+          console.log(res, strategyName, pickedRowIdx, args, 'xxxxxxxxxxxxx')
         }
-      };
-      return strategys;
+      }
+      return strategys
     },
     /**
      * @param {string} strategyName 策略名
@@ -485,8 +485,8 @@ export default {
      * 如，编辑按钮点击后，出现弹窗表单之前，需要初始化表单的元数据 和 表单值绑定数据等逻辑
      */
     getDialogFormOpenEventStrategy(strategyName, pickedRowIdx, args) {
-      const strategys = {};
-      return strategys;
+      const strategys = {}
+      return strategys
     },
     /**
      * @param {string} strategyName 策略名
@@ -504,12 +504,12 @@ export default {
      * 如,新增按钮 弹窗后 填完表单 点击提交按钮时 需要先校验表单,再执行请求;表单校验逻辑不需要,只需要写请求逻辑即可
      */
     getDialogFormValidSubmitEventStrategy(strategyName, pickedRowIdx, args) {
-      const strategys = {};
-      return strategys;
+      const strategys = {}
+      return strategys
     },
-    ////////////////////////////////////
+    // //////////////////////////////////
     // 复杂自定义组件,最常用的三个函数 getFormCustomizeEventStrategyAboveTable、getTableCustomizeEventStrategy、getDialogFormCustomizeEventStrategy
-    ////////////////////////////////////
+    // //////////////////////////////////
     /**
      * @param {string} strategyName 策略名
      * @param {array} args args数组 `eventFromKey=${args[0]};用户自定义传入的数据是否存在=${args.length>1};`
@@ -525,8 +525,8 @@ export default {
      * 2. 在当前vue文件里的组件meta数据中的事件回调中 使用 this.mixins_emitEventStrategy("FormAboveTable", eventStrategyName, ...args);
      */
     getFormCustomizeEventStrategyAboveTable(strategyName, args) {
-      const strategys = {};
-      return strategys;
+      const strategys = {}
+      return strategys
     },
     /**
      * @param {string} strategyName 策略名
@@ -543,9 +543,9 @@ export default {
      * 2. 在当前vue文件里的组件meta数据中的事件回调中 使用 this.mixins_emitEventStrategy("Table", eventStrategyName, ...args);
      */
     getTableCustomizeEventStrategy(strategyName, pickedRowIdx, args) {
-      //console.log(`strategyName=${strategyName};rowIdx=${args[0]};colIdx=${args[1]};colKey=${args[2]};multiComponentIdx=${args[3]};用户自定义传入的数据是否存在=${args.length>4};`)
-      const strategys = {};
-      return strategys;
+      // console.log(`strategyName=${strategyName};rowIdx=${args[0]};colIdx=${args[1]};colKey=${args[2]};multiComponentIdx=${args[3]};用户自定义传入的数据是否存在=${args.length>4};`)
+      const strategys = {}
+      return strategys
     },
     /**
      * @param {string} strategyName 策略名
@@ -562,11 +562,11 @@ export default {
      * 2. 在当前vue文件里的组件meta数据中的事件回调中 使用 this.mixins_emitEventStrategy("DialogForm", eventStrategyName, ...args);
      *  */
     getDialogFormCustomizeEventStrategy(strategyName, args) {
-      const strategys = {};
-      return strategys;
+      const strategys = {}
+      return strategys
     }
   }
-};
+}
 </script>
 
 <style scoped>
